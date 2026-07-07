@@ -1,17 +1,25 @@
-const form = document.getElementById('form'), input = document.getElementById('input'), todoUl = document.getElementById('todos');
-const save = () => localStorage.setItem('todos', JSON.stringify([...todoUl.children].map(li => ({ text: li.innerText }))));
+const form = document.getElementById("form");
+const input = document.getElementById("input");
+const todos = document.getElementById("todos");
 
-const add = todo => {
-    const li = document.createElement('li');
-    li.innerText = todo.text;
-    li.onclick = () => { li.remove(); save(); };
-    todoUl.appendChild(li);
-};
+form.addEventListener("submit", function (event) {
+    event.preventDefault();
 
-const handle = () => {
-    if (input.value.trim()) { add({ text: input.value }); save(); input.value = ''; }
-};
+    if (input.value == "") {
+        return;
+    }
 
-JSON.parse(localStorage.getItem('todos') || '[]').forEach(add);
-form.onsubmit = e => { e.preventDefault(); handle(); };
-window.oncontextmenu = e => { e.preventDefault(); handle(); };
+    const tarefa = document.createElement("li");
+    tarefa.innerText = input.value;
+
+    tarefa.addEventListener("click", function () {
+        tarefa.classList.toggle("completed");
+    });
+
+    tarefa.addEventListener("dblclick", function () {
+        tarefa.remove();
+    });
+
+    todos.appendChild(tarefa);
+    input.value = "";
+});
